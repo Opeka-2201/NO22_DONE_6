@@ -1,0 +1,30 @@
+\section{Model}
+
+\subsection{Implementation of the model in linear programming}
+In order to to compute the winning distribution law of the RCVS, one can implement a linear formulation of the model.
+The linear formulation is based on the following variables:
+\begin{itemize}
+  \item $A$ the voting matrix where $A_{i,j}$ represents the results of a duel between the $i$-th and $j$-th candidates.
+  The elements of the matrix are computed following this rule : for each voter, if the $i$-th canditate is ranked higher than the $j$-th candidate the element $A_{i,j}$ is incremented
+  and the element $A_{j,i}$ is decremented.
+  \item $p$ the probability vector where $p_i$ represents the probability that the $i$-th candidate wins.
+\end{itemize}
+
+The linear formulation of the model is the following:
+\begin{align*}
+  &\min_{p} \sum p^T A\\
+  \text{s.t. } &p^T 1 = 1\\
+  &p \geq 0\\
+  &p^T A \geq 0  
+\end{align*}
+
+\subsection{Application of the RCVS to an example}
+
+
+\subsection{Discussion of the dual variables and optimal dual basis}
+
+
+\subsection{Solution of the linear in a linear system}
+
+
+\subsection{\textit{Bonus} : Comparaison of the RCVS with an alternative voting system}

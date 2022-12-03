@@ -1,5 +1,3 @@
-# create a linear program to compute the condorcet winner ditribution law in RCVS
-
 using JuMP, Gurobi
 
 # A, B, C, D candidates
