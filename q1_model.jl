@@ -1,5 +1,4 @@
 using JuMP, Gurobi
-
 # A, B, C, D candidates
 # 100 voters
 # 4 candidates
@@ -20,9 +19,8 @@ A = [0 -40 0 0;
 
 e = ones(4)
 
-# Maximize on polyhedron {p in R^n | p >= 0, p^T e= 1, p^T a = 0}
-
-# Implement model in Gurobi
+# Maximize p^T x A x e 
+# on polyhedron {p in R^n | p >= 0, p^T e= 1, p^T a = 0}
 
 m = Model(Gurobi.Optimizer)
 
@@ -32,8 +30,11 @@ m = Model(Gurobi.Optimizer)
 
 @constraint(m, p' * A .>= 0)
 
-@objective(m, Min, p' * A * e)
+@objective(m, Max, p' * A * e)
 
 optimize!(m)
 
-println("p = ", value.(p))
+println("Optimal objective value: ", objective_value(m))
+println("Optimal p: ", value.(p))
+
+println(solution_summary(m, verbose=true))
