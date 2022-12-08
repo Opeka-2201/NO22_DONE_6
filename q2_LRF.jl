@@ -103,13 +103,6 @@ for i in 1:E-1
 end
 
 
-function abs(xi)
-    if xi >= 0
-        return xi
-    else
-        return -xi
-    end
-end
 
 e = ones(4)
 

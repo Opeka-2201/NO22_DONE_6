@@ -12,17 +12,10 @@ using JuMP, Gurobi
 # D beats B 10 times and loses 90 times : D_34 = 10 - 90 = -80
 # D beats C 60 times and loses 40 times : D_34 = 60 - 40 = 20
 
-<<<<<<< HEAD
-A = [ 0 -40   0   0;
-     40   0 -60  80;
-      0  60   0 -20;
-      0 -80  20   0 ] 
-=======
 pi_duels = [0 -40 0 0;
             40 0 -60 80;
             0 60 0 -20;
             0 -80 20 0]
->>>>>>> 95beb645c6991f987cf819f6df968f812db073e1
 
 e = ones(4)
 
