@@ -1,1 +1,101 @@
 \section{Linear Robust Formulation}
+\setcounter{subsection}{5}
+\subsection{Electors change their votes}
+One can compute the number of elections relative to the number of maximum changes as the following formula with $n$ representing the number of maximum changes :
+
+$$E = \sum_{i=0}^n 12^i$$
+\newpage
+Here are some values for $E$ : 
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+$n$ & 0 & 1  & 2   & 3    & 4     \\ \hline
+$E$ & 1 & 13 & 157 & 1885 & 22621 \\ \hline
+\end{tabular}
+\caption{Values of $E$ for some $n$}
+\label{tab:E_N}
+\end{table}
+
+The number $12$ comes from the number of possible changes for a system with 4 candidates. If a voter changes his mind, it could result in 12 different modifications of the matrix $\pi$. One could create a set of 12 matrices representing the different possibilities : 
+
+$$ \begin{bmatrix}
+0 & \pm 2 & 0 & 0 \\
+\pm 2 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 
+\end{bmatrix} \text{ , }
+\begin{bmatrix}
+0 & 0 &\pm 2 &  0 \\
+0 & 0 & 0 & 0 \\
+\pm 2 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 
+\end{bmatrix}\text{ , }
+\begin{bmatrix}
+0 & 0 & 0 & \pm 2 \\
+0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 \\
+\pm 2 & 0 & 0 & 0 
+\end{bmatrix}$$
+$$
+\begin{bmatrix}
+0 & 0 & 0 & 0 \\
+0 & 0 & \pm 2 & 0 \\
+0 & \pm 2 & 0 & 0 \\
+0 & 0 & 0 & 0 
+\end{bmatrix} \text{ , }
+\begin{bmatrix}
+0 & 0 & 0 & 0 \\
+0 & 0  & 0 & \pm 2\\
+0 &0 &  0 & 0 \\
+0 & \pm 2 & 0 & 0 
+\end{bmatrix} \text{ , }
+\begin{bmatrix}
+0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 \\
+0 & 0 & 0 & \pm 2 \\
+0 & 0 & \pm 2 & 0 
+\end{bmatrix} $$ \\\\
+
+To compute the matrix containing all the possible elections, one simply needs to apply a combination of all the different change matrices. The complete $\pi$ matrix becomes :
+
+$$\pi = \begin{pmatrix}
+  0 & -40 & 0 & 0\\
+  40 & 0 & -60 & 80\\
+  0 & 60 & 0 & -20\\
+  0 & -80 & 20 & 0\\
+  &&&\\
+  0 & -38 & 0 & 0\\
+  38 & 0 & -60 & 80\\
+  0 & 60 & 0 & -20\\
+  0 & -80 & 20 & 0\\
+  &&&\\
+  0 & -40 & 2 & 0\\
+  40 & 0 & -60 & 80\\
+  -2 & 60 & 0 & -20\\
+  0 & -80 & 20 & 0\\
+  . & . & . & .\\
+  . & . & . & .\\
+  . & . & . & .
+\end{pmatrix}$$
+This implementation of the generation of the $\pi$ matrix is done in the \verb|q2_LRF.jl|. 
+To compute this matrix. One can implement the function \verb|get_change| which takes as inputs \verb|chan|, the matrix containing the 12 possibilities of changes explained earlier and \verb|i|, an index which is decoded into base 12, to assign the correct changes to the initial duel matrix. For example, for $i = 58$ which translates into 4 11 in base 12, means we need to apply the changes 4 and 11 to the initial matrix.
+
+\subsection{Linear Approximation}
+
+To implement a linear problem in standard form to compute the approximation of the previously discussed problem, one can use a simplex formulation. The objective function is the following :
+$$\sum_{i=1}^E  \left( \mathbb{1} \left( \sum_{j=1}^4 \left( p^T \times \pi_i \right) _j>0 \right)\right)$$
+
+This function is the  $l_0$ norm of the vector fill with the $l_1$ norm of each vector $p^T \times \pi$. 
+
+\begin{align*}
+&\max \quad ||\textbf{l}||_0\\
+\text{s.t.}\quad &l_i = ||\textbf{p}^T * \boldsymbol{\pi}_i||_1\\
+  &\textbf{p} * \mathbf{1} \quad\text{where $\mathbf{1}$ is a vector of 4 times one} \\
+  &\boldsymbol\pi_i*p \ge 0\\
+  &p_i \ge 0
+\end{align*}
+
+\subsection{Implementation as a linear program}
+The implementation can be found in the \verb|q2_LRF| file, but we are aware that the results obtained are not the one expected, as the results should be much closer to the original lottery in the table \ref{tab:q1_prob}.

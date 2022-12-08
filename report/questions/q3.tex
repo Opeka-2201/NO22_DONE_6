@@ -1,1 +1,12 @@
 \section{Quadratic Robust Formulation}
+\setcounter{subsection}{10}
+\subsection{SOCP Approximation}
+To approximate the previous problem, we can use the $l_2$ norm instead of the $l_1$ norm. This give us the following standard formula : 
+\begin{align*}
+&\max \quad ||\textbf{l}||_0\\
+\text{s.t.} \quad & l_i = ||\textbf{p}^T * \boldsymbol{\pi}_i||_2\\
+  & \textbf{p} * \mathbf{1} \quad\text{where $\mathbf{1}$ is a vector of 4 times one} \\
+  & \boldsymbol\pi_i*p \ge 0\\
+  & p_i \ge 0
+\end{align*}
+This is a rapid way to make a conic problem.
