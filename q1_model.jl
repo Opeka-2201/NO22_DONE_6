@@ -1,5 +1,4 @@
 using JuMP, Gurobi
-
 # A, B, C, D candidates
 # 100 voters
 # 4 candidates
@@ -13,29 +12,34 @@ using JuMP, Gurobi
 # D beats B 10 times and loses 90 times : D_34 = 10 - 90 = -80
 # D beats C 60 times and loses 40 times : D_34 = 60 - 40 = 20
 
+<<<<<<< HEAD
 A = [ 0 -40   0   0;
      40   0 -60  80;
       0  60   0 -20;
       0 -80  20   0 ] 
+=======
+pi_duels = [0 -40 0 0;
+            40 0 -60 80;
+            0 60 0 -20;
+            0 -80 20 0]
+>>>>>>> 95beb645c6991f987cf819f6df968f812db073e1
 
 e = ones(4)
 
-# Maximize on polyhedron {p in R^n | p >= 0, p^T e= 1, p^T a = 0}
-
-# Implement model in Gurobi
+# Maximize p^T x A x e 
+# on polyhedron {p in R^n | p >= 0, p^T e= 1, p^T a = 0}
 
 m = Model(Gurobi.Optimizer)
 
-@variable(m, p[1:4] .>= 0)
+@variable(m ,p[1:4] .>= 0)
 
-@constraint(m, p' * e  == 1)
+@constraint(m, c1[1:4], p' * pi_duels .>= 0)
+@constraint(m, c2, p' * e  == 1)
 
-@constraint(m, p' * A .>= 0)
-
-@objective(m, Min, p' * A * e)
+@objective(m, Max, 1)
 
 optimize!(m)
 
-println("p = ", value.(p))
-
-
+println("Optimal objective value: ", objective_value(m))
+println("Optimal p: ", value.(p))
+println(solution_summary(m, verbose=true))
